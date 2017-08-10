@@ -19,6 +19,6 @@ from webhook import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.Webhook.as_view()),
+    url(r'^$', views.WebhookCrypt.as_view()),
     url(r'^update-menu', views.UpdateMenu.as_view()),
 ]

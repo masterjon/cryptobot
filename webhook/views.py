@@ -24,7 +24,7 @@ class UpdateMenu(APIView):
         return HttpResponse(response)
 
 
-class Webhook(APIView):
+class WebhookCrypt(APIView):
     def get(self, request):
         hub_mode = request.GET.get('hub.mode', '')
         hub_verify_token = request.GET.get('hub.verify_token', '')
