@@ -1,0 +1,6 @@
+*.pyc
+*.pyo
+.DS_Store
+secrets.json
+#webhook/migrations/*
+#db.sqlite3
