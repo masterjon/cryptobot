@@ -93,9 +93,11 @@ def received_postback(request, event, sender_id):
 def send_price_updates():
     import bitso
     api = bitso.Api()
-    
-    r = requests.get('https://coinmarketcap-nexuist.rhcloud.com/api/eth')
-    r = r.json()
-    ether_mxn = r['price']['mxn']
-    message = "Ether mxn: {}".format(ether_mxn)
+    tick = api.ticker('eth_mxn')
+    message = "1 ETH = {} MXN".format("{:,}".format(tick.last))
     bot.send(SimpleMessage(settings.FB_ADMIN_ID, message))
+
+    # r = requests.get('https://coinmarketcap-nexuist.rhcloud.com/api/eth')
+    # r = r.json()
+    # ether_mxn = r['price']['mxn']
+    # message = "Ether mxn: {}".format(ether_mxn)
