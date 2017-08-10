@@ -84,7 +84,6 @@ def received_postback(request, event, sender_id):
     payload = postback['payload']
     print "Received postback for user {} and page {} at {} with payload: {}".format(sender_id, recipient_id, time_of_message, payload)
     if payload == 'GET_STARTED':
-        bot.send(SimpleMessage(sender_id, "ok"))
         send_price_updates()
     else:
         print "no action"
