@@ -70,7 +70,7 @@ def received_message(request, event, sender_id):
         else:
             #bot.send(SenderAction(sender_id, SenderAction.TYPING_ON))
             #bot.send(SimpleMessage(sender_id, "command"))
-            print "success"
+            print "success"º
 
     elif message_attachments:
         bot.send(SimpleMessage(sender_id, "Message with attachment"))
@@ -92,8 +92,10 @@ def received_postback(request, event, sender_id):
 def send_price_updates():
     import bitso
     api = bitso.Api()
-    tick = api.ticker('eth_mxn')
-    message = "1 ETH = {} MXN".format("{:,}".format(tick.last))
+    ether = api.ticker('eth_mxn')
+    bitcoin = api.ticker('btc_mxn')
+    message = "1 ETH = {} MXN".format("{:,}".format(ether.last))
+    message = "1 BTC = {} MXN".format("{:,}".format(bitcoin.last))
     bot.send(SimpleMessage(settings.FB_ADMIN_ID, message))
 
     # r = requests.get('https://coinmarketcap-nexuist.rhcloud.com/api/eth')
