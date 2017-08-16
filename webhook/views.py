@@ -96,8 +96,8 @@ def send_price_updates():
     bitcoin = api.ticker('btc_mxn')
     message_eth = "1 ETH = {} MXN".format("{:,}".format(ether.last))
     message_btc = "1 BTC = {} MXN".format("{:,}".format(bitcoin.last))
-    bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_eth))
     bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_btc))
+    bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_eth))
 
     # r = requests.get('https://coinmarketcap-nexuist.rhcloud.com/api/eth')
     # r = r.json()
