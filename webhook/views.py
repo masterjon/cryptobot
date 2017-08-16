@@ -16,7 +16,7 @@ from fb_messenger.MessageElement import MessageElement
 from fb_messenger.QuickReplay import QuickReplay, ButtonReplay
 from fb_messenger.MessageReceipt import MessageReceiptElement, Address, Summary, Adjustment
 from fb_messenger.PersistentMenu import persistent_menu
-
+import bitso
 
 class UpdateMenu(APIView):
 
@@ -91,7 +91,6 @@ def received_postback(request, event, sender_id):
 
 
 def send_price_updates():
-    import bitso
     api = bitso.Api()
     ether = api.ticker('eth_mxn')
     bitcoin = api.ticker('btc_mxn')
@@ -109,15 +108,15 @@ def percentage_change(amount, currency):
     getcontext().prec = 3
     old_value = 0
     if currency == 'eth':
-        old_value = Decimal(5000)
+        old_value = Decimal(5200)
     elif currency == 'btc':
-        old_value = Decimal(70000)
+        old_value = Decimal(72000)
 
     percent = ((amount / old_value) - 1) * 100
     if percent < 0:
-        return "🔴↓ {}%".format(percent)
+        return "🔴 {}% ⇩".format(percent)
     else:
-        return "🔵↑ {}%".format(percent)
+        return "🔵 {}% ⇧".format(percent)
 
 
     # r = requests.get('https://coinmarketcap-nexuist.rhcloud.com/api/eth')
