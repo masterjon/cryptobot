@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from decimal import *
 from __future__ import unicode_literals
+from decimal import *
 import requests
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
