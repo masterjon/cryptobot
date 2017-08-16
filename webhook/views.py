@@ -91,24 +91,18 @@ def received_postback(request, event, sender_id):
 
 
 def send_price_updates():
-    print "send_price_updates"
     api = bitso.Api()
     ether = api.ticker('eth_mxn')
     bitcoin = api.ticker('btc_mxn')
-    print bitcoin
     ether_percent = percentage_change(ether.last, 'eth')
     bitcoin_percent = percentage_change(bitcoin.last, 'btc')
-    print bitcoin_percent
     message_eth = "1 ETH = {} MXN {}".format("{:,}".format(ether.last), ether_percent)
     message_btc = "1 BTC = {} MXN {}".format("{:,}".format(bitcoin.last), bitcoin_percent)
-    print message_eth
-    print message_btc
     bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_btc))
     bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_eth))
 
 
 def percentage_change(amount, currency):
-    print "percentage_change"
     getcontext().prec = 3
     old_value = 0
     if currency == 'eth':
