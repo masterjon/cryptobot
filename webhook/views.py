@@ -98,6 +98,7 @@ def send_price_updates():
     print bitcoin
     ether_percent = percentage_change(ether.last, 'eth')
     bitcoin_percent = percentage_change(bitcoin.last, 'btc')
+    print bitcoin_percent
     message_eth = "1 ETH = {} MXN {}".format("{:,}".format(ether.last), ether_percent)
     message_btc = "1 BTC = {} MXN {}".format("{:,}".format(bitcoin.last), bitcoin_percent)
     print message_eth
@@ -107,6 +108,7 @@ def send_price_updates():
 
 
 def percentage_change(amount, currency):
+    print "percentage_change"
     getcontext().prec = 3
     old_value = 0
     if currency == 'eth':
@@ -117,8 +119,8 @@ def percentage_change(amount, currency):
     percent = ((amount / old_value) - 1) * 100
     if percent < 0:
         return "🔴 {}% ⇩".format(percent)
-    else:
-        return "🔵 {}% ⇧".format(percent)
+
+    return "🔵 {}% ⇧".format(percent)
 
 
     # r = requests.get('https://coinmarketcap-nexuist.rhcloud.com/api/eth')
