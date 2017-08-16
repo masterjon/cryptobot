@@ -118,9 +118,9 @@ def percentage_change(amount, currency):
 
     percent = ((amount / old_value) - 1) * 100
     if percent < 0:
-        return " {}% ".format(percent)
+        return "🔴 {}% ⇩".format(percent)
 
-    return " {}% ".format(percent)
+    return "🔵 {}% ⇧".format(percent)
 
 
     # r = requests.get('https://coinmarketcap-nexuist.rhcloud.com/api/eth')
