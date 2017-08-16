@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from decimal import *
 from __future__ import unicode_literals
 import requests
 from django.conf import settings
@@ -94,10 +95,30 @@ def send_price_updates():
     api = bitso.Api()
     ether = api.ticker('eth_mxn')
     bitcoin = api.ticker('btc_mxn')
-    message_eth = "1 ETH = {} MXN".format("{:,}".format(ether.last))
-    message_btc = "1 BTC = {} MXN".format("{:,}".format(bitcoin.last))
-    bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_btc))
-    bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_eth))
+    ether_percent = percentage_change(ether.last, 'eth')
+    bitcoin_percent = percentage_change(bitcoin.last, 'btc')
+    message_eth = "1 ETH = {} MXN {}".format("{:,}".format(ether.last), ether_percent)
+    message_btc = "1 BTC = {} MXN {}".format("{:,}".format(bitcoin.last), bitcoin_percent)
+    print message_eth
+    print message_btc
+    #bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_btc))
+    #bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_eth))
+
+
+def percentage_change(amount, currency):
+    getcontext().prec = 3
+    old_value = 0
+    if currency == 'eth':
+        old_value = Decimal(5000)
+    elif currency == 'btc':
+        old_value = Decimal(70000)
+
+    percent = ((amount / old_value) - 1) * 100
+    if percent < 0:
+        return "🔴↓ {}%".format(percent)
+    else:
+        return "🔵↑ {}%".format(percent)
+
 
     # r = requests.get('https://coinmarketcap-nexuist.rhcloud.com/api/eth')
     # r = r.json()
