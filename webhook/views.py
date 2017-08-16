@@ -91,6 +91,7 @@ def received_postback(request, event, sender_id):
 
 
 def send_price_updates():
+    print "send_price_updates"
     api = bitso.Api()
     ether = api.ticker('eth_mxn')
     bitcoin = api.ticker('btc_mxn')
@@ -108,7 +109,7 @@ def percentage_change(amount, currency):
     getcontext().prec = 3
     old_value = 0
     if currency == 'eth':
-        old_value = Decimal(5200)
+        old_value = Decimal(5117.17)
     elif currency == 'btc':
         old_value = Decimal(72000)
 
