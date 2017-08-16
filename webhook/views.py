@@ -101,8 +101,8 @@ def send_price_updates():
     message_btc = "1 BTC = {} MXN {}".format("{:,}".format(bitcoin.last), bitcoin_percent)
     print message_eth
     print message_btc
-    #bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_btc))
-    #bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_eth))
+    bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_btc))
+    bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_eth))
 
 
 def percentage_change(amount, currency):
