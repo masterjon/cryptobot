@@ -95,6 +95,7 @@ def send_price_updates():
     api = bitso.Api()
     ether = api.ticker('eth_mxn')
     bitcoin = api.ticker('btc_mxn')
+    print bitcoin
     ether_percent = percentage_change(ether.last, 'eth')
     bitcoin_percent = percentage_change(bitcoin.last, 'btc')
     message_eth = "1 ETH = {} MXN {}".format("{:,}".format(ether.last), ether_percent)
