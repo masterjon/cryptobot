@@ -6,7 +6,13 @@ cta_en_ = [
         "type": "postback",
         "title": "Ether Price",
         "payload": "GET_STARTED"
+    },
+    {
+        "type": "postback",
+        "title": "Open Orders",
+        "payload": "SHOW_OPEN_ORDERS"
     }
+
 ]
 
 persistent_menu = {

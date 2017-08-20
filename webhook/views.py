@@ -86,12 +86,15 @@ def received_postback(request, event, sender_id):
     print "Received postback for user {} and page {} at {} with payload: {}".format(sender_id, recipient_id, time_of_message, payload)
     if payload == 'GET_STARTED':
         send_price_updates()
+    elif payload == 'SHOW_OPEN_ORDERS':
+        show_open_orders()
     else:
         print "no action"
 
 
 def send_price_updates():
     api = bitso.Api()
+    # api = bitso.Api(settings.BITSO_KEY, settings.BITSO_SECRET)
     ether = api.ticker('eth_mxn')
     bitcoin = api.ticker('btc_mxn')
     ether_percent = percentage_change(ether.last, 'eth')
@@ -115,6 +118,23 @@ def percentage_change(amount, currency):
         return "🔴 {}% ⇩".format(percent)
 
     return "🔵 {}% ⇧".format(percent)
+
+
+def buy_sell(amount, operation):
+    if operation in ['buy', 'sell']:
+        xrp = api.ticker('xrp_mxn').last
+        order = api.place_order(book='xrp_mxn', side=operation, order_type='limit', major=amount, price=xrp)
+        print order
+    else:
+        print "Please provide a valid operation"
+
+
+def show_open_orders():
+    api = bitso.Api(settings.BITSO_KEY, settings.BITSO_SECRET)
+    oo = api.open_orders('btc_mxn')
+    for o in oo:
+        message = "{} BTC, por {} MXN a {} MXN por BTC".format(o.original_amount, o.original_value, o.price)
+        bot.send(SimpleMessage(message))
 
 
     # r = requests.get('https://coinmarketcap-nexuist.rhcloud.com/api/eth')
