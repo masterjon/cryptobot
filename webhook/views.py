@@ -130,14 +130,15 @@ def buy_sell(amount, operation):
 
 
 def show_open_orders():
+    print "ooooooo-"
     api = bitso.Api(settings.BITSO_KEY, settings.BITSO_SECRET)
     oo = api.open_orders('btc_mxn')
     for o in oo:
         message = "{} BTC, por {} MXN a {} MXN por BTC".format(o.original_amount, o.original_value, o.price)
-        print message
-        bot.send(SimpleMessage(message))
-    else:
-        bot.send(SimpleMessage("No hay ordenes abiertas"))
+        bot.send(SimpleMessage(settings.FB_ADMIN_ID, message))
+
+    if len(oo) == 0:
+        bot.send(SimpleMessage(settings.FB_ADMIN_ID, "No hay ordenes abiertas"))
 
 
     # r = requests.get('https://coinmarketcap-nexuist.rhcloud.com/api/eth')

@@ -159,6 +159,9 @@ FB_PAGE_ACCESS_TOKENS = {
 FB_ADMIN_ID = get_secret("FB_ADMIN_ID")
 FB_VERIFICATION_TOKEN = get_secret("FB_VERIFICATION_TOKEN")
 
+BITSO_KEY = get_secret("BITSO_KEY")
+BITSO_SECRET = get_secret("BITSO_SECRET")
+
 CRONJOBS = [
     ('0 * * * *', 'webhook.views.send_price_updates')
 ]
