@@ -134,7 +134,7 @@ def show_open_orders():
     api = bitso.Api(settings.BITSO_KEY, settings.BITSO_SECRET)
     oo = api.open_orders('btc_mxn')
     for o in oo:
-        message = "{} BTC, por {} MXN a {} MXN por BTC".format(o.original_amount, o.original_value, o.price)
+        message = "{} BTC, por {} MXN a {} MXN por BTC".format(o.original_amount, "{:,}".format(o.original_value), "{:,}".format(o.price))
         bot.send(SimpleMessage(settings.FB_ADMIN_ID, message))
 
     if len(oo) == 0:
