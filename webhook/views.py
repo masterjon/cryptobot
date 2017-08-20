@@ -135,6 +135,8 @@ def show_open_orders():
     for o in oo:
         message = "{} BTC, por {} MXN a {} MXN por BTC".format(o.original_amount, o.original_value, o.price)
         bot.send(SimpleMessage(message))
+    else:
+        bot.send(SimpleMessage("No hay ordenes abiertas"))
 
 
     # r = requests.get('https://coinmarketcap-nexuist.rhcloud.com/api/eth')
