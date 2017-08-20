@@ -134,6 +134,7 @@ def show_open_orders():
     oo = api.open_orders('btc_mxn')
     for o in oo:
         message = "{} BTC, por {} MXN a {} MXN por BTC".format(o.original_amount, o.original_value, o.price)
+        print message
         bot.send(SimpleMessage(message))
     else:
         bot.send(SimpleMessage("No hay ordenes abiertas"))
