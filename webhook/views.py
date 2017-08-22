@@ -111,7 +111,7 @@ def percentage_change(amount, currency):
     if currency == 'eth':
         old_value = Decimal(5117.17)
     elif currency == 'btc':
-        old_value = Decimal(72000)
+        old_value = Decimal(70000)
 
     percent = ((amount / old_value) - 1) * 100
     if percent < 0:
