@@ -163,5 +163,5 @@ BITSO_KEY = get_secret("BITSO_KEY")
 BITSO_SECRET = get_secret("BITSO_SECRET")
 
 CRONJOBS = [
-    ('0 * * * *', 'webhook.views.send_price_updates')
+    ('0 */2 * * *', 'webhook.views.send_price_updates')
 ]
