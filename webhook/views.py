@@ -98,10 +98,13 @@ def send_price_updates():
     ether = api.ticker('eth_mxn')
     bitcoin = api.ticker('btc_mxn')
     ether_percent = percentage_change(ether.last, 'eth')
+    ether_percent_2 = percentage_change(ether.last, 'eth2')
     bitcoin_percent = percentage_change(bitcoin.last, 'btc')
-    message_eth = "1 ETH = {} MXN {}".format("{:,}".format(ether.last), ether_percent)
-    message_btc = "1 BTC = {} MXN {}".format("{:,}".format(bitcoin.last), bitcoin_percent)
+    message_eth = "1 ETH = {} MXN {}".format("{:,}".format(ether.last), percentage_rep(ether_percent))
+    message_eth2 = "50K => {} MXN {}".format("{:,f}".format(50000 * ((ether_percent_2 / 100) + 1)), percentage_rep(ether_percent_2))
+    message_btc = "1 BTC = {} MXN {}".format("{:,}".format(bitcoin.last), percentage_rep(bitcoin_percent))
     bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_eth))
+    bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_eth2))
     bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_btc))
 
 
@@ -110,14 +113,20 @@ def percentage_change(amount, currency):
     old_value = 0
     if currency == 'eth':
         old_value = Decimal(5117.17)
+    if currency == 'eth2':
+        old_value = Decimal(5500.00)
+
     elif currency == 'btc':
         old_value = Decimal(70000)
 
-    percent = ((amount / old_value) - 1) * 100
-    if percent < 0:
-        return "🔴 {}% ⇩".format(percent)
+    return ((amount / old_value) - 1) * 100
 
-    return "🔵 {}% ⇧".format(percent)
+
+def percentage_rep(p):
+    if p < 0:
+        return "🔴 {}% ⇩".format(p)
+
+    return "🔵 {}% ⇧".format(p)
 
 
 def buy_sell(amount, operation):
