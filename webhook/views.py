@@ -103,9 +103,10 @@ def send_price_updates():
     message_eth = "1 ETH = {} MXN {}".format("{:,}".format(ether.last), percentage_rep(ether_percent))
     message_eth2 = "50K => {} MXN {}".format("{:,f}".format(50000 * ((ether_percent_2 / 100) + 1)), percentage_rep(ether_percent_2))
     message_btc = "1 BTC = {} MXN {}".format("{:,}".format(bitcoin.last), percentage_rep(bitcoin_percent))
-    bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_eth))
-    bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_eth2))
+
     bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_btc))
+    bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_eth2))
+    bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_eth))
 
 
 def percentage_change(amount, currency):
