@@ -99,9 +99,11 @@ def send_price_updates():
     bitcoin = api.ticker('btc_mxn')
     ether_percent = percentage_change(ether.last, 'eth')
     ether_percent_2 = percentage_change(ether.last, 'eth2')
+    ether_percent_3 = percentage_change(ether.last, 'eth3')
     bitcoin_percent = percentage_change(bitcoin.last, 'btc')
     message_eth = "1 ETH = {} MXN {}".format("{:,}".format(ether.last), percentage_rep(ether_percent))
     message_eth2 = "25K => {} MXN {}".format("{:,f}".format(25000 * ((ether_percent_2 / 100) + 1)), percentage_rep(ether_percent_2))
+    message_eth2 = "25K => {} MXN {}".format("{:,f}".format(25000 * ((ether_percent_3 / 100) + 1)), percentage_rep(ether_percent_2))
     message_btc = "1 BTC = {} MXN {}".format("{:,}".format(bitcoin.last), percentage_rep(bitcoin_percent))
 
     bot.send(SimpleMessage(settings.FB_ADMIN_ID, message_btc))
@@ -116,6 +118,8 @@ def percentage_change(amount, currency):
         old_value = Decimal(5117.17)
     if currency == 'eth2':
         old_value = Decimal(8800.00)
+    if currency == 'eth3':
+        old_value = Decimal(8330.00)
     elif currency == 'btc':
         old_value = Decimal(70000)
 
