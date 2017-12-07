@@ -17,6 +17,7 @@ from fb_messenger.QuickReplay import QuickReplay, ButtonReplay
 from fb_messenger.MessageReceipt import MessageReceiptElement, Address, Summary, Adjustment
 from fb_messenger.PersistentMenu import persistent_menu
 import bitso
+from coinbase.wallet.client import Client
 
 class UpdateMenu(APIView):
 
@@ -93,6 +94,11 @@ def received_postback(request, event, sender_id):
 
 
 def send_price_updates():
+    #COINBASE
+    client = Client('WJrZZsSpBThLAmQh','dk8eB5PwAdGzc3zhT6xLUxtOTK22B8au', api_version='YYYY-MM-DD')
+    price = client.get_spot_price(currency='USD')
+
+    #BITSO
     api = bitso.Api()
     # api = bitso.Api(settings.BITSO_KEY, settings.BITSO_SECRET)
     ether = api.ticker('eth_mxn')
@@ -101,7 +107,7 @@ def send_price_updates():
     ether_percent_2 = percentage_change(ether.last, 'eth2')
     ether_percent_3 = percentage_change(ether.last, 'eth3')
     bitcoin_percent = percentage_change(bitcoin.last, 'btc')
-    message_btc = "1 BTC = {} MXN {}".format("{:,}".format(bitcoin.last), percentage_rep(bitcoin_percent))
+    message_btc = "1 BTC = {} MXN {} USD {}".format("{:,}".format(price.amount.last), "{:,}".format(bitcoin.last), percentage_rep(bitcoin_percent))
     message_eth = "1 ETH = {} MXN {}".format("{:,}".format(ether.last), percentage_rep(ether_percent))
     message_eth2 = "25K => {} MXN {}".format("{:,f}".format(25000 * ((ether_percent_2 / 100) + 1)), percentage_rep(ether_percent_2))
     message_eth3 = "25K => {} MXN {}".format("{:,f}".format(25000 * ((ether_percent_3 / 100) + 1)), percentage_rep(ether_percent_3))
