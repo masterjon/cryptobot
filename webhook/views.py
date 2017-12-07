@@ -107,7 +107,7 @@ def send_price_updates():
     ether_percent_2 = percentage_change(ether.last, 'eth2')
     ether_percent_3 = percentage_change(ether.last, 'eth3')
     bitcoin_percent = percentage_change(bitcoin.last, 'btc')
-    message_btc = "1 BTC = {} MXN {} USD {}".format("{:,}".format(price.amount.last), "{:,}".format(bitcoin.last), percentage_rep(bitcoin_percent))
+    message_btc = "1 BTC = {} MXN {} USD {}".format("{:,}".format(price.amount), "{:,}".format(bitcoin.last), percentage_rep(bitcoin_percent))
     message_eth = "1 ETH = {} MXN {}".format("{:,}".format(ether.last), percentage_rep(ether_percent))
     message_eth2 = "25K => {} MXN {}".format("{:,f}".format(25000 * ((ether_percent_2 / 100) + 1)), percentage_rep(ether_percent_2))
     message_eth3 = "25K => {} MXN {}".format("{:,f}".format(25000 * ((ether_percent_3 / 100) + 1)), percentage_rep(ether_percent_3))
