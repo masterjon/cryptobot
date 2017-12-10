@@ -96,7 +96,8 @@ def received_postback(request, event, sender_id):
 def send_price_updates():
     #COINBASE
     client = Client('WJrZZsSpBThLAmQh','dk8eB5PwAdGzc3zhT6xLUxtOTK22B8au', api_version='YYYY-MM-DD')
-    price = client.get_spot_price(currency='USD')
+    price_btc_usd = client.get_spot_price(currency_pair='BTC-USD')
+    price_eth_usd = client.get_spot_price(currency_pair='ETH-USD')
 
     #BITSO
     api = bitso.Api()
@@ -107,8 +108,8 @@ def send_price_updates():
     ether_percent_2 = percentage_change(ether.last, 'eth2')
     ether_percent_3 = percentage_change(ether.last, 'eth3')
     bitcoin_percent = percentage_change(bitcoin.last, 'btc')
-    message_btc = "1 BTC = {} MXN | {} USD {}".format("{:,}".format(bitcoin.last), price.amount, percentage_rep(bitcoin_percent))
-    message_eth = "1 ETH = {} MXN {}".format("{:,}".format(ether.last), percentage_rep(ether_percent))
+    message_btc = "1 BTC = {} MXN | {} USD {}".format("{:,}".format(bitcoin.last), price_btc_usd.amount, percentage_rep(bitcoin_percent))
+    message_eth = "1 ETH = {} MXN | {} USD {}".format("{:,}".format(ether.last), price_eth_usd.amount, percentage_rep(ether_percent))
     message_eth2 = "25K => {} MXN {}".format("{:,f}".format(25000 * ((ether_percent_2 / 100) + 1)), percentage_rep(ether_percent_2))
     message_eth3 = "25K => {} MXN {}".format("{:,f}".format(25000 * ((ether_percent_3 / 100) + 1)), percentage_rep(ether_percent_3))
 
