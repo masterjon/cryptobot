@@ -162,6 +162,9 @@ FB_VERIFICATION_TOKEN = get_secret("FB_VERIFICATION_TOKEN")
 BITSO_KEY = get_secret("BITSO_KEY")
 BITSO_SECRET = get_secret("BITSO_SECRET")
 
+COINBASE_KEY = get_secret("COINBASE_KEY")
+COINBASE_SECRET = get_secret("COINBASE_SECRET")
+
 CRONJOBS = [
     ('0 */2 * * *', 'webhook.views.send_price_updates')
 ]

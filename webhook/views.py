@@ -89,13 +89,15 @@ def received_postback(request, event, sender_id):
         send_price_updates()
     elif payload == 'SHOW_OPEN_ORDERS':
         show_open_orders()
+    elif payload == 'TRADE':
+        trade_process()
     else:
         print "no action"
 
 
 def send_price_updates():
     #COINBASE
-    client = Client('WJrZZsSpBThLAmQh','dk8eB5PwAdGzc3zhT6xLUxtOTK22B8au', api_version='YYYY-MM-DD')
+    client = Client(settings.COINBASE_KEY, settings.COINBASE_SECRET, api_version='YYYY-MM-DD')
     price_btc_usd = client.get_spot_price(currency_pair='BTC-USD')
     price_eth_usd = client.get_spot_price(currency_pair='ETH-USD')
 
@@ -152,7 +154,7 @@ def buy_sell(amount, operation):
 
 def show_open_orders():
     print "ooooooo-"
-    api = bitso.Api("osPvNyiYwc", "d7109d5566e3c7ca8cbf4b92cd438eed")
+    api = bitso.Api(settings.BITSO_KEY, settings.BITSO_SECRET)
     oobtc = api.open_orders('btc_mxn')
     ooeth = api.open_orders('eth_mxn')
     oo = oobtc + ooeth
@@ -167,6 +169,10 @@ def show_open_orders():
 
     if len(oo) == 0:
         bot.send(SimpleMessage(settings.FB_ADMIN_ID, "No hay ordenes abiertas"))
+
+
+def trade_process():
+    api = bitso.Api(settings.BITSO_KEY, settings.BITSO_SECRET)
 
 
     # r = requests.get('https://coinmarketcap-nexuist.rhcloud.com/api/eth')

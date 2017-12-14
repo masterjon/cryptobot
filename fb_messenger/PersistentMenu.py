@@ -4,14 +4,19 @@
 cta_en_ = [
     {
         "type": "postback",
-        "title": "Ether Price",
+        "title": "Get Prices",
         "payload": "GET_STARTED"
     },
     {
         "type": "postback",
         "title": "Open Orders",
         "payload": "SHOW_OPEN_ORDERS"
-    }
+    },
+    {
+        "type": "postback",
+        "title": "Trade",
+        "payload": "TRADE"
+    },
 
 ]
 
