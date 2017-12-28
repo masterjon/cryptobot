@@ -8,9 +8,21 @@ cta_en_ = [
         "payload": "GET_STARTED"
     },
     {
-        "type": "postback",
-        "title": "Open Orders",
-        "payload": "SHOW_OPEN_ORDERS"
+        "type": "nested",
+        "title": "Orders",
+        "call_to_actions": [
+            {
+                "type": "postback",
+                "title": "Show Open Orders",
+                "payload": "SHOW_OPEN_ORDERS"
+            },
+            {
+                "type": "postback",
+                "title": "Cancel Order",
+                "payload": "CANCEL_ORDER"
+            }
+
+        ]
     },
     {
         "type": "postback",
