@@ -27,6 +27,8 @@ trade_dict = {
     'BUY': 'Comprar',
     'SELL': 'Vender',
 }
+up_gif_url = 'https://media.giphy.com/media/BT33Hk6FMYHV6/giphy.gif'
+down_gif_url = 'https://media.giphy.com/media/3ohs7HdhQA4ffttvrO/giphy.gif'
 
 # TODO
 # Optimizar send_price_updates para agregar facilmente mas monedas
@@ -241,53 +243,78 @@ def received_postback(request, event, sender_id):
 
 
 def send_price_updates():
-    #COINBASE
-    client = Client(settings.COINBASE_KEY, settings.COINBASE_SECRET, api_version='YYYY-MM-DD')
-    price_btc_usd = client.get_spot_price(currency_pair='BTC-USD')
-    price_eth_usd = client.get_spot_price(currency_pair='ETH-USD')
+    # #COINBASE
+    # client = Client(settings.COINBASE_KEY, settings.COINBASE_SECRET, api_version='YYYY-MM-DD')
+    # price_btc_usd = client.get_spot_price(currency_pair='BTC-USD')
+    # price_eth_usd = client.get_spot_price(currency_pair='ETH-USD')
 
-    #BITSO
+    # r = requests.get('https://coinmarketcap-nexuist.rhcloud.com/api/eth')
+    # r = r.json()
+    # ether_mxn = r['price']['mxn']
+    # message = "Ether mxn: {}".format(ether_mxn)
+    # BITSO
     api = bitso.Api()
-    # api = bitso.Api(settings.BITSO_KEY, settings.BITSO_SECRET)
-    ether = api.ticker('eth_mxn')
-    bitcoin = api.ticker('btc_mxn')
+    percent_treshold = 5.0
 
-    percent_treshold = 1.0
-    last_eth_percent = percentage_change(ether.last, 'last_eth')
-    last_btc_percent = percentage_change(bitcoin.last, 'last_btc')
-    up_gif_url = 'https://media.giphy.com/media/BT33Hk6FMYHV6/giphy.gif'
-    down_gif_url = 'https://media.giphy.com/media/3ohs7HdhQA4ffttvrO/giphy.gif'
+    for currency in CURRENCIES:
+        # PRICE MXN
+        currency_price = api.ticker(currency.lower() + '_mxn')
 
-    if last_eth_percent > percent_treshold:
-        bot.send(SimpleMessage(my_sender_id, 'ETH {}'.format(last_eth_percent)))
-        bot.send(SimpleMessage(my_sender_id, up_gif_url, 'image'))
-    elif last_eth_percent < (percent_treshold * -1):
-        bot.send(SimpleMessage(my_sender_id, 'ETH {}'.format(last_eth_percent)))
-        bot.send(SimpleMessage(my_sender_id, down_gif_url, 'image'))
+        # PRICE USD
+        r = requests.get('https://api.cryptonator.com/api/ticker/' + currency.lower() + '-usd')
+        r = r.json()
+        currency_price_usd = r['ticker']['price']
 
-    if last_btc_percent > percent_treshold:
-        bot.send(SimpleMessage(my_sender_id, 'BTC {}'.format(last_btc_percent)))
-        bot.send(SimpleMessage(my_sender_id, up_gif_url, 'image'))
-    elif last_btc_percent < (percent_treshold * -1):
-        bot.send(SimpleMessage(my_sender_id, 'BTC {}'.format(last_btc_percent)))
-        bot.send(SimpleMessage(my_sender_id, down_gif_url, 'image'))
+        last_currency_percent = percentage_change(currency_price.last, 'last_' + currency.lower())
+        if last_currency_percent > percent_treshold:
+            bot.send(SimpleMessage(my_sender_id, '{} {}'.format(currency, last_currency_percent)))
+            bot.send(SimpleMessage(my_sender_id, up_gif_url, 'image'))
+        elif last_currency_percent < (percent_treshold * -1):
+            bot.send(SimpleMessage(my_sender_id, '{} {}'.format(currency, last_currency_percent)))
+            bot.send(SimpleMessage(my_sender_id, down_gif_url, 'image'))
+        redisCli.append_to_dict(my_sender_id, "saved_price_last_" + currency.lower(), currency_price.last)
+        # currency_percent = percentage_change(currency_price.last, currency)
+        message = "1 {} = {} MXN | {} USD {}".format(currency, "{:,}".format(currency_price.last), "{:,.2f}".format(float(currency_price_usd)), percentage_rep(last_currency_percent))
+        bot.send(SimpleMessage(my_sender_id, message))
 
-    redisCli.append_to_dict(my_sender_id, "saved_price_eth", ether.last)
-    redisCli.append_to_dict(my_sender_id, "saved_price_btc", bitcoin.last)
+    # ether = api.ticker('eth_mxn')
+    # bitcoin = api.ticker('btc_mxn')
 
-    ether_percent = percentage_change(ether.last, 'eth')
-    ether_percent_2 = percentage_change(ether.last, 'eth2')
-    ether_percent_3 = percentage_change(ether.last, 'eth3')
-    bitcoin_percent = percentage_change(bitcoin.last, 'btc')
-    message_btc = "1 BTC = {} MXN | {} USD {}".format("{:,}".format(bitcoin.last), price_btc_usd.amount, percentage_rep(bitcoin_percent))
-    message_eth = "1 ETH = {} MXN | {} USD {}".format("{:,}".format(ether.last), price_eth_usd.amount, percentage_rep(ether_percent))
-    message_eth2 = "25K => {} MXN {}".format("{:,f}".format(25000 * ((ether_percent_2 / 100) + 1)), percentage_rep(ether_percent_2))
-    message_eth3 = "25K => {} MXN {}".format("{:,f}".format(25000 * ((ether_percent_3 / 100) + 1)), percentage_rep(ether_percent_3))
+    
+    # last_eth_percent = percentage_change(ether.last, 'last_eth')
+    # last_btc_percent = percentage_change(bitcoin.last, 'last_btc')
+    
 
-    bot.send(SimpleMessage(my_sender_id, message_btc))
-    #bot.send(SimpleMessage(my_sender_id, message_eth2))
-    #bot.send(SimpleMessage(my_sender_id, message_eth3))
-    bot.send(SimpleMessage(my_sender_id, message_eth))
+    # if last_eth_percent > percent_treshold:
+    #     bot.send(SimpleMessage(my_sender_id, 'ETH {}'.format(last_eth_percent)))
+    #     bot.send(SimpleMessage(my_sender_id, up_gif_url, 'image'))
+    # elif last_eth_percent < (percent_treshold * -1):
+    #     bot.send(SimpleMessage(my_sender_id, 'ETH {}'.format(last_eth_percent)))
+    #     bot.send(SimpleMessage(my_sender_id, down_gif_url, 'image'))
+
+    # if last_btc_percent > percent_treshold:
+    #     bot.send(SimpleMessage(my_sender_id, 'BTC {}'.format(last_btc_percent)))
+    #     bot.send(SimpleMessage(my_sender_id, up_gif_url, 'image'))
+    # elif last_btc_percent < (percent_treshold * -1):
+    #     bot.send(SimpleMessage(my_sender_id, 'BTC {}'.format(last_btc_percent)))
+    #     bot.send(SimpleMessage(my_sender_id, down_gif_url, 'image'))
+
+    # redisCli.append_to_dict(my_sender_id, "saved_price_eth", ether.last)
+    # redisCli.append_to_dict(my_sender_id, "saved_price_btc", bitcoin.last)
+
+    # ether_percent = percentage_change(ether.last, 'eth')
+    # ether_percent_2 = percentage_change(ether.last, 'eth2')
+    # ether_percent_3 = percentage_change(ether.last, 'eth3')
+    # bitcoin_percent = percentage_change(bitcoin.last, 'btc')
+    # message_btc = "1 BTC = {} MXN | {} USD {}".format("{:,}".format(bitcoin.last), price_btc_usd.amount, percentage_rep(bitcoin_percent))
+    # message_eth = "1 ETH = {} MXN | {} USD {}".format("{:,}".format(ether.last), price_eth_usd.amount, percentage_rep(ether_percent))
+    # message_eth2 = "25K => {} MXN {}".format("{:,f}".format(25000 * ((ether_percent_2 / 100) + 1)), percentage_rep(ether_percent_2))
+    # message_eth3 = "25K => {} MXN {}".format("{:,f}".format(25000 * ((ether_percent_3 / 100) + 1)), percentage_rep(ether_percent_3))
+
+    # bot.send(SimpleMessage(my_sender_id, message_btc))
+    # #bot.send(SimpleMessage(my_sender_id, message_eth2))
+    # #bot.send(SimpleMessage(my_sender_id, message_eth3))
+    # bot.send(SimpleMessage(my_sender_id, message_eth))
 
 
 def percentage_change(amount, currency):
@@ -301,13 +328,8 @@ def percentage_change(amount, currency):
         old_value = Decimal(8330.00)
     elif currency == 'btc':
         old_value = Decimal(70000)
-    elif currency == 'last_eth':
-        val = redisCli.get_value_dict(my_sender_id, 'saved_price_eth')
-        if val:
-            int_val = parseNumber(val)
-            old_value = Decimal(int_val)
-    elif currency == 'last_btc':
-        val = redisCli.get_value_dict(my_sender_id, 'saved_price_btc')
+    else:
+        val = redisCli.get_value_dict(my_sender_id, 'saved_price_' + currency)
         if val:
             int_val = parseNumber(val)
             old_value = Decimal(int_val)
