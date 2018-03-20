@@ -166,5 +166,5 @@ COINBASE_KEY = get_secret("COINBASE_KEY")
 COINBASE_SECRET = get_secret("COINBASE_SECRET")
 
 CRONJOBS = [
-    ('0 */2 * * *', 'webhook.views.send_price_updates')
+    ('0 */6 * * *', 'webhook.views.send_price_updates')
 ]
