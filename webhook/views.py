@@ -261,8 +261,8 @@ def send_price_updates():
         currency_price = api.ticker(currency.lower() + '_mxn')
 
         # PRICE USD
-        r = requests.get('https://api.cryptonator.com/api/ticker/' + currency.lower() + '-usd')
-        r = r.json()
+        # r = requests.get('https://api.cryptonator.com/api/ticker/' + currency.lower() + '-usd')
+        # r = r.json()
         #currency_price_usd = r['ticker']['price']
 
         last_currency_percent = percentage_change(currency_price.last, 'last_' + currency.lower())
