@@ -275,7 +275,7 @@ def send_price_updates():
         redisCli.append_to_dict(my_sender_id, "saved_price_last_" + currency.lower(), currency_price.last)
         # currency_percent = percentage_change(currency_price.last, currency)
         #message = "1 {} = {} MXN | {} USD {}".format(currency, "{:,}".format(currency_price.last), "{:,.2f}".format(float(currency_price_usd)), percentage_rep(last_currency_percent))
-        message = "1 {} = {} MXN".format(currency, "{:,}".format(currency_price.last)), percentage_rep(last_currency_percent))
+        message = "1 {} = {} MXN {}".format(currency, "{:,}".format(currency_price.last), percentage_rep(last_currency_percent))
         bot.send(SimpleMessage(my_sender_id, message))
 
     # ether = api.ticker('eth_mxn')
