@@ -41,7 +41,7 @@ def get_secret(setting, secrets=secrets):
 SECRET_KEY = get_secret("SECRET_KEY")
 
 
-ADMINS = [('Jon', 'jon@punkmkt.com'), ]
+ADMINS = [('Jon', 'jon@punk.solutions'), ]
 
 ALLOWED_HOSTS = []
 
